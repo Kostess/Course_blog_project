@@ -1,0 +1,12 @@
+.linkMenu:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: width 0.3s;
+}
+
+.linkMenu:hover:after {
+    width: 100%;
+}
