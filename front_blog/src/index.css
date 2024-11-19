@@ -4,7 +4,7 @@
 
 @layer components {
     #root {
-        background-color: theme('colors.main-blue');
+        background-color: theme('colors.main-dark-blue');
         color: #fff;
         font-family: theme('fontFamily.mainFontFamily'), serif;
     }

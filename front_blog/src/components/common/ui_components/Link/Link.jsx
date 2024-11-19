@@ -1,6 +1,6 @@
 import classes from "./Link.module.css";
 
-export const LinkMenu = ({href, children}) => {
+export const LinkMain= ({href, children}) => {
     return (
         <a href={href} className={`capitalize ${classes.linkMenu}`}>
             {children}
@@ -18,7 +18,7 @@ export const LinkLogo = ({href, children}) => {
 
 export const LinkAsButton = ({href, children}) => {
     return (
-        <a href={href} className="bg-main-green text-white rounded-lg px-6 py-3 text-sm text-center font-bold hover:bg-main-dark-green transition-colors duration-300">
+        <a href={href} className="block bg-main-green text-white rounded-lg px-6 py-3 text-sm text-center font-bold hover:bg-main-dark-green transition-colors duration-300">
             {children}
         </a>
     )

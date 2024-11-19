@@ -10,7 +10,7 @@ function App() {
         <BrowserRouter future={{v7_relativeSplatPath: true,}}>
             <Routes>
                 <Route path="*" element={<Error404/>} />
-                <Route path="/" element={<Home isLoginUser={isLoginUser}/>} />
+                <Route path="/" element={<Home isLoginUser={isLoginUser} title="Блог TechWorld!"/>} />
                 <Route path="/category" element={<Category isLoginUser={isLoginUser}/>} />
             </Routes>
         </BrowserRouter>
