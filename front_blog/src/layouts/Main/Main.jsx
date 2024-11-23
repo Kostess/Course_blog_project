@@ -23,7 +23,7 @@ export const Main = () => {
     };
 
     return (
-        <main className="container mx-auto mt-20">
+        <main className="container mx-auto mt-10">
             <ToolbarPost />
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-8">
                 {getCurrentPosts().map((post, index) => {
@@ -43,11 +43,11 @@ export const Main = () => {
                     onPageChange={handlePageChange}
                     containerClassName={'flex space-x-2'}
                     pageLinkClassName={'block px-4 py-2 rounded-lg bg-main-green text-white hover:bg-main-dark-green transition-colors duration-300'}
-                    activeLinkClassName={'bg-main-dark-green'}
+                    activeLinkClassName={'bg-[#2e6c31]'}
                     previousLinkClassName={'block px-4 py-2 rounded-lg bg-main-green text-white hover:bg-main-dark-green transition-colors duration-300'}
                     nextLinkClassName={'block px-4 py-2 rounded-lg bg-main-green text-white hover:bg-main-dark-green transition-colors duration-300'}
                     breakLinkClassName={'block px-4 py-2 rounded-lg bg-main-green text-white hover:bg-main-dark-green transition-colors duration-300'}
-                    disabledLinkClassName={'opacity-50 cursor-not-allowed bg-main-dark-green'}
+                    disabledLinkClassName={'opacity-50 cursor-not-allowed bg-[#2e6c31]'}
                 />
             </div>
         </main>

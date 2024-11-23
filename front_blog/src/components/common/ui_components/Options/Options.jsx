@@ -1,11 +1,10 @@
-export const Options = ({ isHidden }) => {
-    const optionsTitle = ["По категории", "По дате", "По просмотрам", "По тегам", "По лайкам"];
+export const Options = ({ isHidden, options, onClick }) => {
 
     return (
-        <ul className={`list-none w-full overflow-hidden bg-main-gray text-black rounded-lg absolute top-14 left-0 transition-max-height duration-700 ease-in-out ${isHidden ? 'max-h-0 p-0' : 'max-h-[210px] py-3 '}`}>
-            {optionsTitle.map((item, index) => {
-                return <li key={index} className="cursor-pointer px-3 py-1 hover:bg-main-dark-gray duration-300">{item}</li>
+        <div className={`w-full overflow-hidden bg-main-gray text-black rounded-lg absolute top-14 left-0 transition-max-height duration-700 ease-in-out ${isHidden ? 'max-h-0 p-0' : 'max-h-[210px] py-3 '}`}>
+            {options.map((item, index) => {
+                return <button key={index} onClick={onClick}  className="cursor-pointer w-full text-left px-3 py-1 hover:bg-main-dark-gray duration-300">{item}</button>
             })}
-        </ul>
+        </div>
     );
 }

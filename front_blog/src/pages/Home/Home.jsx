@@ -11,7 +11,7 @@ export const Home = ({isLoginUser, title}) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser}/>
+            <Header isLoginUser={isLoginUser} title={title || "TechWorld!"}/>
             <Main/>
             <Footer/>
         </>

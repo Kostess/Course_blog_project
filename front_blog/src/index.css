@@ -3,9 +3,24 @@
 @tailwind utilities;
 
 @layer components {
+    html, body {
+        height: 100%;
+    }
+
     #root {
         background-color: theme('colors.main-dark-blue');
         color: #fff;
         font-family: theme('fontFamily.mainFontFamily'), serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+    }
+
+    main {
+        flex-grow: 1;
+    }
+
+    footer {
+        margin-top: auto;
     }
 }

@@ -17,6 +17,8 @@ export default defineConfig({
       '@ui': path.resolve(__dirname, 'src/components/common/ui_components'),
       // eslint-disable-next-line no-undef
       '@layouts': path.resolve(__dirname, 'src/layouts'),
+      // eslint-disable-next-line no-undef
+      '@assets': path.resolve(__dirname, 'src/assets'),
     }
   }
 })

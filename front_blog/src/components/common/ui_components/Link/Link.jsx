@@ -18,7 +18,15 @@ export const LinkLogo = ({href, children}) => {
 
 export const LinkAsButton = ({href, children}) => {
     return (
-        <a href={href} className="block bg-main-green text-white rounded-lg px-6 py-3 text-sm text-center font-bold hover:bg-main-dark-green transition-colors duration-300">
+        <a href={href} className="bg-main-green text-white rounded-lg px-6 py-3 text-sm text-center font-bold hover:bg-main-dark-green transition-colors duration-300">
+            {children}
+        </a>
+    )
+}
+
+export const LinkBlue = ({href, children}) => {
+    return (
+        <a href={href} className="text-blue-500 hover:underline">
             {children}
         </a>
     )

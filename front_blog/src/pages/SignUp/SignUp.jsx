@@ -1,9 +1,9 @@
 import {Header} from "@layouts/Header/Header.jsx";
-import {MainCategory} from "@layouts/Main/MainCategory.jsx";
 import {Footer} from "@layouts/Footer/Footer.jsx";
+import {MainSignUp} from "@layouts/Main/MainSignUp.jsx";
 import {useEffect} from "react";
 
-export const Category = ({isLoginUser, title}) => {
+export const SignUp = ({isLoginUser, title}) => {
 
     useEffect(() => {
         document.title = title || "TechWorld!"
@@ -11,8 +11,8 @@ export const Category = ({isLoginUser, title}) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title || "TechWorld!"}/>
-            <MainCategory/>
+            <Header isLoginUser={isLoginUser} title={title}/>
+            <MainSignUp/>
             <Footer/>
         </>
     )
