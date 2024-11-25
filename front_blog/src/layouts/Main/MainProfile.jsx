@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import defaultAvatar from '@assets/default-avatar.png';
-import {ButtonProfile} from "@ui/Button/Button.jsx";
+import {ButtonProfile, MainButton} from "@ui/Button/Button.jsx";
+import {Input, Textarea} from "@ui/Input/Input.jsx";
+import {BaseText, TitleBlock} from "@ui/Text/Text.jsx";
+import {PostGroupPagination} from "@components/PostGroupPagination/PostGroupPagination.jsx";
+import {ToolbarPost} from "@components/ToolbarPost/ToolbarPost.jsx";
+import {LinkAsButton} from "@ui/Link/Link.jsx";
 
 export const MainProfile = () => {
     const [avatar, setAvatar] = useState(defaultAvatar);
@@ -19,6 +24,8 @@ export const MainProfile = () => {
             reader.readAsDataURL(file);
         }
     };
+
+    const isPosts = false;
 
     const handleLogout = () => {
         // Логика выхода из профиля
@@ -57,29 +64,26 @@ export const MainProfile = () => {
                     <div className="flex flex-col gap-3 w-full">
                         {isEditing ? (
                             <>
-                                <input
+                                <Input
                                     type="text"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    className="bg-gray-800 text-white p-2 rounded-lg"
                                 />
-                                <input
+                                <Input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="bg-gray-800 text-white p-2 rounded-lg"
                                 />
-                                <textarea
+                                <Textarea
                                     value={bio}
                                     onChange={(e) => setBio(e.target.value)}
-                                    className="bg-gray-800 text-white p-2 rounded-lg"
                                 />
-                                <button
+                                <MainButton
                                     onClick={handleSaveProfile}
-                                    className="bg-main-green text-white rounded-lg px-6 py-3 text-sm text-center font-bold hover:bg-main-dark-green transition-colors duration-300 mt-4 self-start"
+                                    className="mt-4 self-start"
                                 >
                                     Сохранить
-                                </button>
+                                </MainButton>
                             </>
                         ) : (
                             <>
@@ -91,12 +95,11 @@ export const MainProfile = () => {
                     </div>
                 </div>
                 <div className="flex flex-col self-start gap-2 mb-4">
-                    <button
+                    <MainButton
                         onClick={handleEditProfile}
-                        className="bg-main-green text-white rounded-lg px-6 py-3 text-sm text-center font-bold hover:bg-main-dark-green transition-colors duration-300"
                     >
                         {isEditing ? 'Отмена' : 'Редактировать'}
-                    </button>
+                    </MainButton>
                     <button
                         onClick={handleLogout}
                         className="rounded-lg bg-red-500 hover:bg-red-600 duration-300 p-3 text-white"
@@ -110,6 +113,31 @@ export const MainProfile = () => {
                         Удалить профиль
                     </button>
                 </div>
+            </div>
+            <div className="mt-20">
+                <TitleBlock>
+                    Ваши статьи
+                </TitleBlock>
+                <article className={`${isPosts? "mt-10" : "mt-5"} inline-block`}>
+
+                    {isPosts &&
+                        <>
+                            <ToolbarPost/>
+                            <PostGroupPagination/>
+                        </>
+                    }
+                    {!isPosts &&
+                        <>
+                            <BaseText>
+                                Вы не написали ещё ни одну статью
+                            </BaseText>
+                            <span className="inline-block mt-2">
+                                <LinkAsButton href="/edit-post">Написать пост</LinkAsButton>
+                            </span>
+
+                        </>
+                    }
+                </article>
             </div>
         </main>
     );

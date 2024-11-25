@@ -28,9 +28,11 @@ export const Header = ({isLoginUser, title}) => {
                     {isLoginUser ? <DropdownLinks options={options}/> : <LinkMain href="/login">Войти</LinkMain>}
                 </div>
             </div>
-            <TitlePage>
-                {title}
-            </TitlePage>
+            <div className="mt-10 text-center flex justify-center">
+                <TitlePage>
+                    {title}
+                </TitlePage>
+            </div>
         </header>
     )
 }

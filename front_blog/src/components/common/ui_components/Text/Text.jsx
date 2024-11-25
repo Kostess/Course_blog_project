@@ -4,7 +4,7 @@ export const TitlePage = ({ children }) => {
     const text = typeof children === 'string' ? children : String(children);
 
     return (
-        <h1 className="mt-10 text-main-green text-4xl text-center max-w-[500px] w-full absolute left-1/2 transform -translate-x-1/2">
+        <h1 className="text-main-green text-4xl max-w-[500px] w-full">
             <ReactTyped
                 strings={[text]}
                 typeSpeed={120}

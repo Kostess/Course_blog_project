@@ -8,15 +8,15 @@ export const Button = ({children, ...props}) => {
     )
 }
 
-export const MainButton= ({children, ...props}) => {
+export const MainButton = ({children, className='', ...props}) => {
     return (
-        <button {...props} className="rounded-lg bg-main-green hover:bg-main-dark-green duration-300 p-3">
+        <button {...props} className={`font-bold rounded-lg bg-main-green hover:bg-main-dark-green duration-300 p-3 ${className}`}>
             {children}
         </button>
     )
 }
 
-export const ButtonBackgroundBlue = ({ children, typeSelect, className, ...props }) => {
+export const ButtonBackgroundBlue = ({ children = "", typeSelect = false, className = "", ...props }) => {
     return (
         <button
             {...props}
