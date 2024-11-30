@@ -112,10 +112,10 @@ export const MainEditPost = () => {
                                 Содержание:
                                 <SunEditor
                                     id="content"
+                                    height="500px"
                                     setContents={values.content}
                                     onChange={(content) => setFieldValue("content", content)}
                                     setOptions={{
-                                        height: 300,
                                         buttonList: [
                                             ["undo", "redo"],
                                             ["font", "fontSize", "formatBlock"],

@@ -17,6 +17,8 @@
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.28.0",
     "react-typed": "^2.0.12",
+    "suneditor": "^2.47.0",
+    "suneditor-react": "^3.6.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {
