@@ -43,7 +43,6 @@ exports.createUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     const { username, password } = req.body;
-
     try {
         const user = await User.findOne({ where: { username } });
         if (!user) {
@@ -55,7 +54,7 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ errorPassword: 'Неверный пароль' });
         }
 
-        const token = jwt.sign({ id: user.id, name: user.username, email: user.email }, jwtSecret, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, name: user.username, email: user.email, role: user.role }, jwtSecret, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
         console.error('Ошибка авторизации:', error);

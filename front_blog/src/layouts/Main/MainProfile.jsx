@@ -87,7 +87,7 @@ export const MainProfile = ({user}) => {
                             </>
                         ) : (
                             <>
-                                <span>Username: {user.username}</span>
+                                <span>Username: {user.name}</span>
                                 <span>Email: {user.email}</span>
                                 <span>Биография: {bio}</span>
                             </>

@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {loginUser} from "@api/api.js";
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Введите имя"),
-    password: Yup.string().required("Введите пароль"),
+    username: Yup.string().required("Введите имя"),
+    password: Yup.string().min(6, "Минимальная длина пароля 6 символов").required("Введите пароль"),
 });
 
 export const FormLogin = () => {
@@ -50,7 +50,7 @@ export const FormLogin = () => {
                     </label>
                     <label>
                         Пароль:
-                        <Field type="password" name="password" className="w-full bg-main-blue px-4 py-2.5 rounded-lg outline-0" />
+                        <Field type="password" name="password" autoComplete="on" className="w-full bg-main-blue px-4 py-2.5 rounded-lg outline-0" />
                         {submitCount > 0 && errors.password && (
                             <div className="text-base text-red-500 mt-2">{errors.password}</div>
                         )}

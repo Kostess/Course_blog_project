@@ -26,6 +26,7 @@ function App() {
             try {
                 setIsLoginUser(true);
                 const decoded = jwtDecode(token);
+                console.log(decoded);
                 if (decoded.role === 'admin') {
                     setIsAdmin(true);
                 }
@@ -47,6 +48,7 @@ function App() {
         likes: 0,
         comments: {},
     }
+    console.log(isLoginUser);
 
     const year = post.createdAt.getFullYear();
     const month = String(post.createdAt.getMonth() + 1).padStart(2, '0');
