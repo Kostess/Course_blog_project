@@ -9,17 +9,13 @@ const hashPassword = async (password) => {
     return await bcrypt.hash(password, saltRounds);
 };
 
-const createToken = (user) => {
-    return jwt.sign({ id: user.id, name: user.username, email: user.email }, jwtSecret, { expiresIn: '1h' });
-};
-
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.findAll();
         res.json(users);
     } catch (error) {
-        console.error('Error fetching users:', error); // Логирование ошибки в консоль
-        res.status(500).json({ message: 'Server error', error: error.message }); // Отправка сообщения об ошибке клиенту
+        console.error('Ошибка при получении пользователей:', error);
+        res.status(500).json({ message: 'Ошибка сервера при получении пользователей', error: error.message });
     }
 };
 
@@ -27,20 +23,43 @@ exports.createUser = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        // Хешируем пароль
         const hashedPassword = await hashPassword(password);
+        const userCount = await User.count();
+        const role = userCount === 0 ? 'admin' : 'user';
 
-        // Создаем пользователя в базе данных
-        const user = await User.create({ username, email, password_hash: hashedPassword });
+        const user = await User.create({
+            username,
+            email,
+            password_hash: hashedPassword,
+            role
+        });
 
-        // Создаем JWT-токен
-        const token = createToken(user);
-
-        // Возвращаем токен клиенту
-        res.status(201).json({ token });
+        res.status(201).json({ message: 'Пользователь успешно создан', isCreated: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: `Server error ${error}` });
+        res.status(500).json({ message: `Ошибка сервера при создании пользователя ${error}` });
+    }
+};
+
+exports.loginUser = async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findOne({ where: { username } });
+        if (!user) {
+            return res.status(401).json({ errorUsername: 'Неверное имя пользователя' });
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password_hash);
+        if (!passwordMatch) {
+            return res.status(401).json({ errorPassword: 'Неверный пароль' });
+        }
+
+        const token = jwt.sign({ id: user.id, name: user.username, email: user.email }, jwtSecret, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (error) {
+        console.error('Ошибка авторизации:', error);
+        res.status(500).json({ message: `Ошибка сервера при авторизации пользователя ${error}` });
     }
 };
 
@@ -56,6 +75,6 @@ exports.deleteUser = async (req, res) => {
         await user.destroy();
         res.status(204).send();
     } catch (error) {
-        res.status(500).json({ message: `Ошибка сервера ${error}` });
+        res.status(500).json({ message: `Ошибка сервера при удалении пользователя ${error}` });
     }
 };

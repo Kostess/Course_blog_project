@@ -11,12 +11,31 @@ import {Profile} from "@pages/Profile/Profile.jsx";
 import {EditPost} from "@pages/EditPost/EditPost.jsx";
 import {Post} from "@pages/Post/Post.jsx";
 import {AdminPanel} from "@pages/Admin/AdminPanel.jsx";
-import {useEffect} from "react";
-import {getUsers} from "./api/api.js";
+import {useEffect, useState} from "react";
+import {ProtectedRoute} from "@components/ProtectedRoute/ProtectedRoute.jsx";
+import {jwtDecode} from 'jwt-decode';
+import {RegistrationConfirmed} from "@pages/RegistrationConfirmed/RegistrationConfirmed.jsx";
+import {ConfirmPage} from "@pages/Confirm/Confirm.jsx";
 
 function App() {
-    const isLoginUser = false;
-    const isAdmin = false;
+    const [isLoginUser, setIsLoginUser] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                setIsLoginUser(true);
+                const decoded = jwtDecode(token);
+                if (decoded.role === 'admin') {
+                    setIsAdmin(true);
+                }
+            } catch (error) {
+                console.log(`Ошибка декодирования токена: ${error.message}`);
+            }
+
+        }
+    }, []);
 
     const post = {
         title: "PosgresSQL",
@@ -36,119 +55,30 @@ function App() {
 
     post.createdAt = `${day}-${month}-${year}`;
 
-    useEffect(() => {
-        const fetchArticles = async () => {
-            try {
-                const data = await getUsers();
-                console.log(data);
-            } catch (error) {
-                console.error('Error fetching articles:', error);
-            }
-        };
-
-        fetchArticles();
-    }, []);
-
   return (
       <>
-        <BrowserRouter future={{v7_relativeSplatPath: true,}}>
-            <Routes>
-                <Route
-                    path="*"
-                    element={
-                        <Error404 isLoginUser={isLoginUser}
-                                  title="Страница не найдена"
-                        />
-                    }
-                />
-                <Route
-                    path="/"
-                    element={
-                        <Home isLoginUser={isLoginUser}
-                              title="Блог TechWorld!"
-                        />
-                    }
-                />
-                <Route
-                    path="/category"
-                    element={
-                        <Category isLoginUser={isLoginUser}
-                                  title="Категории"
-                        />
-                    }
-                />
-                <Route
-                    path="/search"
-                    element={
-                        <Search isLoginUser={isLoginUser}
-                                title="Результаты поиска"
-                        />
-                    }
-                />
-                <Route
-                    path="/contact"
-                    element={
-                        <Contact isLoginUser={isLoginUser}
-                                 title="Контакты"
-                        />
-                    }
-                />
-                <Route
-                    path="/signup"
-                    element={
-                        <SignUp isLoginUser={isLoginUser}
-                                title="Регистрация"
-                        />
-                    }
-                />
-                <Route
-                    path="/login"
-                    element={
-                        <Login isLoginUser={isLoginUser}
-                               title="Войти"
-                        />
-                    }
-                />
-                <Route
-                    path="/about"
-                    element={
-                        <About isLoginUser={isLoginUser}
-                               title="О нас"
-                        />
-                    }
-                />
-                <Route
-                    path="/profile"
-                    element={
-                        <Profile isLoginUser={isLoginUser}
-                                 title="Профиль"
-                        />
-                    }
-                />
-                <Route
-                    path="/edit-post"
-                    element={
-                        <EditPost isLoginUser={isLoginUser}
-                                  title="Редактор поста"
-                        />
-                    }
-                />
-                <Route
-                    path="/post"
-                    element={
-                        <Post isLoginUser={isLoginUser}
-                              title={post.title} post={post}
-                        />
-                    }
-                />
-                {
-                    isAdmin
-                    &&
-                    <Route path="/admin" element={<AdminPanel title="Админ панель"/>} />
-                }
+          <BrowserRouter>
+              <Routes>
+                  <Route path="*" element={<Error404 isLoginUser={isLoginUser} title="Страница не найдена" />} />
+                  <Route path="/" element={<Home isLoginUser={isLoginUser} title="Блог TechWorld!" />} />
+                  <Route path="/category" element={<Category isLoginUser={isLoginUser} title="Категории" />} />
+                  <Route path="/search" element={<Search isLoginUser={isLoginUser} title="Результаты поиска" />} />
+                  <Route path="/contact" element={<Contact isLoginUser={isLoginUser} title="Контакты" />} />
+                  <Route path="/signup" element={<SignUp isLoginUser={isLoginUser} title="Регистрация" />} />
+                  <Route path="/login" element={<Login isLoginUser={isLoginUser} title="Войти" />} />
+                  <Route path="/about" element={<About isLoginUser={isLoginUser} title="О нас" />} />
+                  <Route path="/registration-confirmed" element={<RegistrationConfirmed isLoginUser={isLoginUser} title="Регистрация подтверждена" />} />
+                  <Route path="/confirm-page" element={<ConfirmPage isLoginUser={isLoginUser} title="Подтверждение регистрации" />} />
 
-            </Routes>
-        </BrowserRouter>
+                  <Route element={<ProtectedRoute isAuthenticated={isLoginUser} />}>
+                      <Route path="/profile" element={<Profile isLoginUser={isLoginUser} title="Профиль" />} />
+                      <Route path="/edit-post" element={<EditPost isLoginUser={isLoginUser} title="Редактор поста" />} />
+                      <Route path="/post" element={<Post isLoginUser={isLoginUser} title={post.title} post={post} />} />
+                  </Route>
+
+                  {isAdmin && <Route path="/admin" element={<AdminPanel title="Админ панель" />} />}
+              </Routes>
+          </BrowserRouter>
       </>
   )
 }

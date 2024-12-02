@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import {Field, Form, Formik} from "formik";
 import {MainButton} from "@ui/Button/Button.jsx";
 import {createUser} from "../../api/api.js";
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required("Введите имя"),
@@ -10,22 +11,27 @@ const validationSchema = Yup.object().shape({
     confirmPassword: Yup.string().required("Повторите пароль").oneOf([Yup.ref("password")], "Пароли не совпадают")
 });
 
-const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    try {
-        await createUser(values);
-        setSubmitting(false);
-    } catch (error) {
-        setSubmitting(false);
-        if (error.response) {
-            console.error('Server error:', error.response.data);
-            setErrors(error.response.data.errors);
-        } else {
-            console.error('Error:', error.message);
-        }
-    }
-};
-
 export const FormSignUp = () => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+        try {
+            const response = await createUser(values);
+            if (response) {
+                navigate('/profile');
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Ошибка при отправке:', error.response.data);
+                setErrors(error.response.data.errors);
+            } else {
+                console.error('Ошибка:', error.message);
+            }
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <Formik
             initialValues={{ username: '', email: '', password: '', confirmPassword: '' }}

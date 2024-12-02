@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('./config/db');
-const routes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
+const registrationRoutes = require('./routes/registrationRoutes');
 const cors = require('cors');
 const sequelize = require('./config/db');
 
@@ -29,7 +30,8 @@ sequelize.sync()
         console.error('Ошибка синхронизации моделей с базой данных:', err);
     });
 
-app.use('/api', routes);
+app.use('/api', userRoutes);
+app.use('/api', registrationRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

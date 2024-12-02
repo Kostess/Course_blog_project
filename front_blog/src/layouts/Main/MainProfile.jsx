@@ -7,7 +7,7 @@ import {PostGroupPagination} from "@components/PostGroupPagination/PostGroupPagi
 import {ToolbarPost} from "@components/ToolbarPost/ToolbarPost.jsx";
 import {LinkAsButton} from "@ui/Link/Link.jsx";
 
-export const MainProfile = () => {
+export const MainProfile = ({user}) => {
     const [avatar, setAvatar] = useState(defaultAvatar);
     const [username, setUsername] = useState('Username');
     const [email, setEmail] = useState('Email');
@@ -87,8 +87,8 @@ export const MainProfile = () => {
                             </>
                         ) : (
                             <>
-                                <span>Username: {username}</span>
-                                <span>Email: {email}</span>
+                                <span>Username: {user.username}</span>
+                                <span>Email: {user.email}</span>
                                 <span>Биография: {bio}</span>
                             </>
                         )}

@@ -1,18 +1,16 @@
 const express = require('express');
-const router = express.Router();
+const userRoutes = express.Router();
 const userController = require('../controllers/userController');
 const { body, validationResult } = require('express-validator');
 const cors = require('cors');
 
-router.get('/users', cors(), userController.getUsers);
+userRoutes.get('/users-get', cors(), userController.getUsers);
 
-router.post('/users',
-    body('email').notEmpty().isEmail(),
+userRoutes.post('/user-login',
     body('username').notEmpty(),
     body('password').notEmpty(),
     cors(),
     async (req, res, next) => {
-        console.log(req.body);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             console.log(errors.array());
@@ -20,9 +18,9 @@ router.post('/users',
         }
         next();
     },
-    userController.createUser
+    userController.loginUser
 );
 
-router.delete('/users/:id', userController.deleteUser);
+userRoutes.delete('/users-delete/:id', userController.deleteUser);
 
-module.exports = router;
+module.exports = userRoutes;
