@@ -9,9 +9,10 @@ const customFetch = async (url, options = {}) => {
         };
     }
     const response = await fetch(`${API_BASE_URL}${url}`, options);
-    // if (!response.ok) {
-    //     throw new Error('Ошибка сервера');
-    // }
+    console.log(response);
+    if (!response.ok) {
+        throw new Error(`Error ${response.status}`);
+    }
     return response.json();
 };
 
@@ -50,7 +51,6 @@ export const loginUser = async (credentials) => {
 };
 
 export const confirmRegistration = async (token) => {
-    console.log(token);
     return await customFetch('/confirm', {
         method: 'POST',
         headers: {

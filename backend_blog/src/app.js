@@ -7,7 +7,12 @@ const sequelize = require('./config/db');
 
 const app = express();
 
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:5173', // Разрешаем запросы с этого домена
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Разрешенные методы
+    allowedHeaders: ['Content-Type', 'Authorization'], // Разрешенные заголовки
+    credentials: true // Разрешаем отправку куки и авторизационных данных
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

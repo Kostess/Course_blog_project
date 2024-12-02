@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import {Field, Form, Formik} from "formik";
 import {MainButton} from "@ui/Button/Button.jsx";
-import {createUser} from "../../api/api.js";
+import {createUser} from "@api/api.js";
 import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({

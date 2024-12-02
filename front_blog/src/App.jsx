@@ -14,7 +14,6 @@ import {AdminPanel} from "@pages/Admin/AdminPanel.jsx";
 import {useEffect, useState} from "react";
 import {ProtectedRoute} from "@components/ProtectedRoute/ProtectedRoute.jsx";
 import {jwtDecode} from 'jwt-decode';
-import {RegistrationConfirmed} from "@pages/RegistrationConfirmed/RegistrationConfirmed.jsx";
 import {ConfirmPage} from "@pages/Confirm/Confirm.jsx";
 
 function App() {
@@ -67,7 +66,6 @@ function App() {
                   <Route path="/signup" element={<SignUp isLoginUser={isLoginUser} title="Регистрация" />} />
                   <Route path="/login" element={<Login isLoginUser={isLoginUser} title="Войти" />} />
                   <Route path="/about" element={<About isLoginUser={isLoginUser} title="О нас" />} />
-                  <Route path="/registration-confirmed" element={<RegistrationConfirmed isLoginUser={isLoginUser} title="Регистрация подтверждена" />} />
                   <Route path="/confirm-page" element={<ConfirmPage isLoginUser={isLoginUser} title="Подтверждение регистрации" />} />
 
                   <Route element={<ProtectedRoute isAuthenticated={isLoginUser} />}>
