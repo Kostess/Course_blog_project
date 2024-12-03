@@ -3,7 +3,7 @@ import {Header} from "@layouts/Header/Header.jsx";
 import {Footer} from "@layouts/Footer/Footer.jsx";
 import {MainContact} from "@layouts/Main/MainContact.jsx";
 
-export const Contact = ({isLoginUser, title}) => {
+export const Contact = ({title}) => {
 
     useEffect(() => {
         document.title = title || "TechWorld!"
@@ -11,7 +11,7 @@ export const Contact = ({isLoginUser, title}) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title || "TechWorld!"}/>
+            <Header title={title || "TechWorld!"}/>
             <MainContact/>
             <Footer/>
         </>

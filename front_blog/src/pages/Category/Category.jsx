@@ -3,7 +3,7 @@ import {MainCategory} from "@layouts/Main/MainCategory.jsx";
 import {Footer} from "@layouts/Footer/Footer.jsx";
 import {useEffect} from "react";
 
-export const Category = ({isLoginUser, title}) => {
+export const Category = ({title}) => {
 
     useEffect(() => {
         document.title = title || "TechWorld!"
@@ -11,7 +11,7 @@ export const Category = ({isLoginUser, title}) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title || "TechWorld!"}/>
+            <Header title={title || "TechWorld!"}/>
             <MainCategory/>
             <Footer/>
         </>

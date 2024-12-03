@@ -4,7 +4,7 @@ import {Footer} from "@layouts/Footer/Footer.jsx";
 import {Main} from "@layouts/Main/Main.jsx";
 import {MainNoResult} from "@layouts/Main/MainNoResult.jsx";
 
-export const Search = ({isLoginUser, title}) => {
+export const Search = ({title}) => {
 
     useEffect(() => {
         document.title = title || "TechWorld!"
@@ -14,7 +14,7 @@ export const Search = ({isLoginUser, title}) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title || "TechWorld!"}/>
+            <Header title={title || "TechWorld!"}/>
             {result && <Main/>}
             {!result && <MainNoResult/>}
             <Footer/>

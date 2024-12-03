@@ -20,6 +20,7 @@ export default defineConfig({
       // eslint-disable-next-line no-undef
       '@assets': path.resolve(__dirname, 'src/assets'),
       '@api': path.resolve(__dirname, 'src/api'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
     }
   }
 })

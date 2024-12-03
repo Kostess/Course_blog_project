@@ -3,9 +3,9 @@ import { Header } from "@layouts/Header/Header.jsx";
 import { LinkAsButton } from "@ui/Link/Link.jsx";
 import { Footer } from "@layouts/Footer/Footer.jsx";
 import { BaseText } from "@ui/Text/Text.jsx";
-import { FaExclamationTriangle } from "react-icons/fa"; // Импорт иконки
+import { FaExclamationTriangle } from "react-icons/fa";
 
-export const Error404 = ({ isLoginUser, title }) => {
+export const Error404 = ({ title }) => {
 
     useEffect(() => {
         document.title = title || "TechWorld!";
@@ -13,7 +13,7 @@ export const Error404 = ({ isLoginUser, title }) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title || "TechWorld!"} />
+            <Header title={title || "TechWorld!"} />
             <div className="container mx-auto mt-10 flex flex-col items-center justify-center text-center">
                 <FaExclamationTriangle className="text-9xl text-red-500 mb-4 animate-bounce" />
                 <BaseText className="text-2xl mb-4">

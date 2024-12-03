@@ -3,7 +3,7 @@ import {Footer} from "@layouts/Footer/Footer.jsx";
 import {MainSignUp} from "@layouts/Main/MainSignUp.jsx";
 import {useEffect} from "react";
 
-export const SignUp = ({isLoginUser, title}) => {
+export const SignUp = ({title}) => {
 
     useEffect(() => {
         document.title = title || "TechWorld!"
@@ -11,7 +11,7 @@ export const SignUp = ({isLoginUser, title}) => {
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title}/>
+            <Header title={title}/>
             <MainSignUp/>
             <Footer/>
         </>

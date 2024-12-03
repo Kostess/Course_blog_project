@@ -11,31 +11,12 @@ import {Profile} from "@pages/Profile/Profile.jsx";
 import {EditPost} from "@pages/EditPost/EditPost.jsx";
 import {Post} from "@pages/Post/Post.jsx";
 import {AdminPanel} from "@pages/Admin/AdminPanel.jsx";
-import {useEffect, useState} from "react";
 import {ProtectedRoute} from "@components/ProtectedRoute/ProtectedRoute.jsx";
-import {jwtDecode} from 'jwt-decode';
 import {ConfirmPage} from "@pages/Confirm/Confirm.jsx";
+import {useAuth} from "@utils/useAuth.jsx";
 
 function App() {
-    const [isLoginUser, setIsLoginUser] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                setIsLoginUser(true);
-                const decoded = jwtDecode(token);
-                console.log(decoded);
-                if (decoded.role === 'admin') {
-                    setIsAdmin(true);
-                }
-            } catch (error) {
-                console.log(`Ошибка декодирования токена: ${error.message}`);
-            }
-
-        }
-    }, []);
+    const { isAdmin, isLoginUser} = useAuth()
 
     const post = {
         title: "PosgresSQL",
@@ -48,7 +29,6 @@ function App() {
         likes: 0,
         comments: {},
     }
-    console.log(isLoginUser);
 
     const year = post.createdAt.getFullYear();
     const month = String(post.createdAt.getMonth() + 1).padStart(2, '0');
@@ -60,23 +40,23 @@ function App() {
       <>
           <BrowserRouter>
               <Routes>
-                  <Route path="*" element={<Error404 isLoginUser={isLoginUser} title="Страница не найдена" />} />
-                  <Route path="/" element={<Home isLoginUser={isLoginUser} title="Блог TechWorld!" />} />
-                  <Route path="/category" element={<Category isLoginUser={isLoginUser} title="Категории" />} />
-                  <Route path="/search" element={<Search isLoginUser={isLoginUser} title="Результаты поиска" />} />
-                  <Route path="/contact" element={<Contact isLoginUser={isLoginUser} title="Контакты" />} />
-                  <Route path="/signup" element={<SignUp isLoginUser={isLoginUser} title="Регистрация" />} />
-                  <Route path="/login" element={<Login isLoginUser={isLoginUser} title="Войти" />} />
-                  <Route path="/about" element={<About isLoginUser={isLoginUser} title="О нас" />} />
-                  <Route path="/confirm-page" element={<ConfirmPage isLoginUser={isLoginUser} title="Подтверждение регистрации" />} />
-
-                  <Route element={<ProtectedRoute isAuthenticated={isLoginUser} />}>
-                      <Route path="/profile" element={<Profile isLoginUser={isLoginUser} title="Профиль" />} />
-                      <Route path="/edit-post" element={<EditPost isLoginUser={isLoginUser} title="Редактор поста" />} />
-                      <Route path="/post" element={<Post isLoginUser={isLoginUser} title={post.title} post={post} />} />
-                  </Route>
+                  <Route path="*" element={<Error404 title="Страница не найдена" />} />
+                  <Route path="/" element={<Home title="Блог TechWorld!" />} />
+                  <Route path="/category" element={<Category title="Категории" />} />
+                  <Route path="/search" element={<Search title="Результаты поиска" />} />
+                  <Route path="/contact" element={<Contact title="Контакты" />} />
+                  <Route path="/signup" element={<SignUp title="Регистрация" />} />
+                  <Route path="/login" element={<Login title="Войти" />} />
+                  <Route path="/about" element={<About title="О нас" />} />
+                  <Route path="/confirm-page" element={<ConfirmPage title="Подтверждение регистрации" />} />
 
                   {isAdmin && <Route path="/admin" element={<AdminPanel title="Админ панель" />} />}
+
+                  <Route element={<ProtectedRoute isAuthenticated={isLoginUser} />}>
+                      <Route path="/profile" element={<Profile title="Профиль" />} />
+                      <Route path="/edit-post" element={<EditPost title="Редактор поста" />} />
+                      <Route path="/post" element={<Post title={post.title} post={post} />} />
+                  </Route>
               </Routes>
           </BrowserRouter>
       </>

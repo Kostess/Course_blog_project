@@ -8,9 +8,11 @@ import { Field, Form, Formik } from "formik";
 import { LinkAsButton } from "@ui/Link/Link.jsx";
 import { CardComment } from "@ui/Card/CardComment.jsx";
 import defaultAvatar from '@assets/default-avatar.png';
+import {useAuth} from "@utils/useAuth.jsx";
 
 export const MainPost = ({ post, isLoginUser }) => {
     const [showModal, setShowModal] = useState(false);
+    const {isUserLogin} = useAuth();
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(window.location.href).then(() => {

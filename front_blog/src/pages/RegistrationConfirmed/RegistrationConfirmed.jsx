@@ -3,14 +3,14 @@ import { Footer } from "@layouts/Footer/Footer.jsx";
 import { MainRegistrationConfirmed } from "@layouts/Main/MainRegistrationConfirmed.jsx";
 import { useEffect } from "react";
 
-export const RegistrationConfirmed = ({ isLoginUser, title }) => {
+export const RegistrationConfirmed = ({ title }) => {
     useEffect(() => {
         document.title = title || "TechWorld!";
     }, [title]);
 
     return (
         <>
-            <Header isLoginUser={isLoginUser} title={title} />
+            <Header title={title} />
             <MainRegistrationConfirmed />
             <Footer />
         </>

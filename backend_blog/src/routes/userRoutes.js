@@ -5,6 +5,7 @@ const { body, validationResult } = require('express-validator');
 const cors = require('cors');
 
 userRoutes.get('/users-get', cors(), userController.getUsers);
+userRoutes.get('/user/:id', cors(), userController.getUsersId);
 
 userRoutes.post('/user-login',
     body('username').notEmpty(),
@@ -21,6 +22,8 @@ userRoutes.post('/user-login',
     userController.loginUser
 );
 
-userRoutes.delete('/users-delete/:id', userController.deleteUser);
+userRoutes.put('/user-update/:id', cors(), userController.updateUser);
+
+userRoutes.delete('/users-delete/:id', cors(), userController.deleteUser);
 
 module.exports = userRoutes;

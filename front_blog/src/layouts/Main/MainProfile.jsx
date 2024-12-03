@@ -1,18 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import defaultAvatar from '@assets/default-avatar.png';
-import {ButtonProfile, MainButton} from "@ui/Button/Button.jsx";
-import {Input, Textarea} from "@ui/Input/Input.jsx";
-import {BaseText, TitleBlock} from "@ui/Text/Text.jsx";
-import {PostGroupPagination} from "@components/PostGroupPagination/PostGroupPagination.jsx";
-import {ToolbarPost} from "@components/ToolbarPost/ToolbarPost.jsx";
-import {LinkAsButton} from "@ui/Link/Link.jsx";
+import { ButtonProfile, MainButton } from "@ui/Button/Button.jsx";
+import { Input, Textarea } from "@ui/Input/Input.jsx";
+import { BaseText, TitleBlock } from "@ui/Text/Text.jsx";
+import { PostGroupPagination } from "@components/PostGroupPagination/PostGroupPagination.jsx";
+import { ToolbarPost } from "@components/ToolbarPost/ToolbarPost.jsx";
+import { LinkAsButton } from "@ui/Link/Link.jsx";
+import {useAuth} from "@utils/useAuth.jsx";
+import {useNavigate} from "react-router-dom";
+import {deleteUser, updateUser} from "@api/api.js";
 
-export const MainProfile = ({user}) => {
-    const [avatar, setAvatar] = useState(defaultAvatar);
-    const [username, setUsername] = useState('Username');
-    const [email, setEmail] = useState('Email');
-    const [bio, setBio] = useState('Биография');
+export const MainProfile = ({ user, onDelete, onSave }) => {
+    const [avatar, setAvatar] = useState(user.avatar || defaultAvatar);
+    const [username, setUsername] = useState(user.username);
+    const [email, setEmail] = useState(user.email);
+    const [bio, setBio] = useState(user.bio);
     const [isEditing, setIsEditing] = useState(false);
+
+    const {logout} = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Обновляем состояние при изменении пропсов
+        setAvatar(user.avatar || defaultAvatar);
+        setUsername(user.username);
+        setEmail(user.email);
+        setBio(user.bio);
+    }, [user]);
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -28,23 +42,34 @@ export const MainProfile = ({user}) => {
     const isPosts = false;
 
     const handleLogout = () => {
-        // Логика выхода из профиля
-        console.log('Выход из профиля');
+        logout();
+        navigate('/login', { replace: true });
     };
 
-    const handleDeleteProfile = () => {
-        // Логика удаления профиля
-        console.log('Удаление профиля');
+    const handleDeleteProfile = async () => {
+        try {
+            await deleteUser(user.id)
+            onDelete();
+        } catch (error) {
+            console.error('Ошибка при удалении профиля:', error);
+        }
     };
 
     const handleEditProfile = () => {
         setIsEditing(!isEditing);
     };
 
-    const handleSaveProfile = () => {
-        // Логика сохранения изменений профиля
-        console.log('Сохранение профиля');
-        setIsEditing(false);
+    const handleSaveProfile = async () => {
+        try {
+            await updateUser(user.id, user)
+
+            // Вызываем функцию onSave, чтобы обновить состояние в родительском компоненте
+            onSave();
+
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Ошибка при сохранении профиля:', error);
+        }
     };
 
     return (
@@ -52,7 +77,7 @@ export const MainProfile = ({user}) => {
             <div className="flex justify-between">
                 <div className="flex gap-5 max-w-xl w-full">
                     <label htmlFor="avatar-upload" className="cursor-pointer">
-                        <ButtonProfile avatar={avatar} widthClassName="w-32" heightClassName="h-32"/>
+                        <ButtonProfile avatar={avatar} widthClassName="w-32" heightClassName="h-32" />
                     </label>
                     <input
                         id="avatar-upload"
@@ -87,8 +112,8 @@ export const MainProfile = ({user}) => {
                             </>
                         ) : (
                             <>
-                                <span>Username: {user.name}</span>
-                                <span>Email: {user.email}</span>
+                                <span>Username: {username}</span>
+                                <span>Email: {email}</span>
                                 <span>Биография: {bio}</span>
                             </>
                         )}
@@ -118,12 +143,11 @@ export const MainProfile = ({user}) => {
                 <TitleBlock>
                     Ваши статьи
                 </TitleBlock>
-                <article className={`${isPosts? "mt-10" : "mt-5"} inline-block`}>
-
+                <article className={`${isPosts ? "mt-10" : "mt-5"} inline-block`}>
                     {isPosts &&
                         <>
-                            <ToolbarPost/>
-                            <PostGroupPagination/>
+                            <ToolbarPost />
+                            <PostGroupPagination />
                         </>
                     }
                     {!isPosts &&
@@ -134,7 +158,6 @@ export const MainProfile = ({user}) => {
                             <span className="inline-block mt-2">
                                 <LinkAsButton href="/edit-post">Написать пост</LinkAsButton>
                             </span>
-
                         </>
                     }
                 </article>

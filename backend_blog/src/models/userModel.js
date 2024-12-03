@@ -1,5 +1,6 @@
 const { DataTypes} = require('sequelize');
 const sequelize = require('../config/db');
+const ProfileModel = require("./profileModel");
 
 const User = sequelize.define('User', {
     user_id: {
@@ -28,6 +29,17 @@ const User = sequelize.define('User', {
 }, {
     tableName: 'users',
     timestamps: true,
+});
+
+// Определение отношений
+User.hasOne(ProfileModel, {
+    foreignKey: 'user_id',
+    as: 'profile', // Алиас для связанного профиля
+});
+
+ProfileModel.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'user', // Алиас для связанного пользователя
 });
 
 module.exports = User;
