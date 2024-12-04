@@ -3,8 +3,27 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const ProfileModel = require("../models/profileModel");
 const {destroy} = require("../models/registrationModel");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const jwtSecret = process.env.JWT_SECRET;
+
+// Настройка хранилища для файлов
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = 'uploads/';
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+export const upload = multer({ storage });
 
 const hashPassword = async (password) => {
     const saltRounds = 10;
@@ -102,8 +121,9 @@ exports.loginUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const {id} = req.params;
-        const { username, email, bio, avatar } = req.body;
+        const { id } = req.params;
+        const { username, email, bio } = req.body;
+        const avatar = req.file ? `/uploads/${req.file.filename}` : null;
 
         // Находим пользователя по user_id
         const user = await User.findByPk(id);
