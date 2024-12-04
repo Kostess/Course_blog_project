@@ -48,7 +48,7 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
 
     const handleDeleteProfile = async () => {
         try {
-            await deleteUser(user.id)
+            await deleteUser(user.userId)
             onDelete();
         } catch (error) {
             console.error('Ошибка при удалении профиля:', error);
@@ -61,7 +61,7 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
 
     const handleSaveProfile = async () => {
         try {
-            await updateUser(user.id, user)
+            await updateUser(user.userId, {username, email, bio, avatar});
 
             // Вызываем функцию onSave, чтобы обновить состояние в родительском компоненте
             onSave();

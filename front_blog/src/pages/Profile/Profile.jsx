@@ -20,7 +20,8 @@ export const Profile = ({title}) => {
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
-                    const userData = await getUserAndProfile(decoded.id);
+                    console.log(decoded);
+                    const userData = await getUserAndProfile(decoded.userId);
                     setUser(userData);
                 } catch (error) {
                     console.error('Ошибка при получении данных о пользователе:', error);
@@ -50,7 +51,7 @@ export const Profile = ({title}) => {
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
-                    const userData = await getUserAndProfile(decoded.id);
+                    const userData = await getUserAndProfile(decoded.userId);
                     setUser(userData);
                 } catch (error) {
                     console.error('Ошибка при получении данных о пользователе:', error);
@@ -66,10 +67,10 @@ export const Profile = ({title}) => {
             <Header title={title || "TechWorld!"} />
             {
                 loading ?
-                    <div>Загрузка...</div>
+                    <div className="container mx-auto">Загрузка...</div>
                     :
                     !user ?
-                        <div>Пользователь не найден</div>
+                        <div className="container mx-auto">Пользователь не найден</div>
                         :
                         <MainProfile user={user} onDelete={handleDelete} onSave={handleSave} />
             }

@@ -67,7 +67,7 @@ exports.confirmRegistration = async (req, res) => {
         jwt.verify(token, jwtSecret);
         // Ищем запись в таблице регистрации
         const registration = await RegistrationModel.findOne({where: {token, is_confirmed: false}});
-        console.log(registration);
+
         if (!registration) {
             return res.status(404).json({ message: 'Токен не найден или уже подтвержден' });
         }

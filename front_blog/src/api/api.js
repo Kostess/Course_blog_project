@@ -17,7 +17,7 @@ const customFetch = async (url, options = {}) => {
 };
 
 export const getUsers = () => customFetch('/users-get');
-export const getUserAndProfile = (id) => customFetch(`/users/${id}`);
+export const getUserAndProfile = (id) => customFetch(`/user/${id}`);
 export const createUser = (user) => customFetch(`/register`, {
     method: 'POST',
     headers: {
@@ -25,7 +25,7 @@ export const createUser = (user) => customFetch(`/register`, {
     },
     body: JSON.stringify(user),
 });
-export const updateUser = (id, user) => customFetch(`/users-update/${id}`, {
+export const updateUser = (id, user) => customFetch(`/user-update/${id}`, {
     method: 'PUT',
     headers: {
         'Content-Type': 'application/json',

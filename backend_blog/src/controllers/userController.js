@@ -23,11 +23,11 @@ exports.getUsers = async (req, res) => {
 
 exports.getUsersId = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const {id} = req.params;
 
         // Найти пользователя и включить связанный профиль
-        const user = await User.findByPk(userId, {
-            attributes: ['username', 'email', 'role'], // Выбираем нужные поля из таблицы User
+        const user = await User.findByPk(id, {
+            attributes: ['user_id', 'username', 'email', 'role'], // Выбираем нужные поля из таблицы User
             include: [{
                 model: ProfileModel,
                 as: 'profile', // алиас
@@ -41,6 +41,7 @@ exports.getUsersId = async (req, res) => {
 
         // Отправляем только нужные данные
         const responseData = {
+            userId: user.user_id,
             username: user.username,
             email: user.email,
             role: user.role,
@@ -90,7 +91,8 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ errorPassword: 'Неверный пароль' });
         }
 
-        const token = jwt.sign({ id: user.id, name: user.username, email: user.email, role: user.role }, jwtSecret, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.user_id, username: user.username, email: user.email, role: user.role }, jwtSecret, { expiresIn: '1h' });
+        console.log(token);
         res.json({ token });
     } catch (error) {
         console.error('Ошибка авторизации:', error);
@@ -121,7 +123,10 @@ exports.updateUser = async (req, res) => {
         }
 
         // Обновляем данные профиля
-        await profile.update({ bio, avatar });
+        console.log(`bio: ${bio}, avatar: ${avatar}`);
+        const updateData = await profile.update({ bio, avatar });
+
+        console.log("updateData: ", updateData);
 
         res.json({ message: 'Профиль успешно обновлен' });
     } catch (error) {

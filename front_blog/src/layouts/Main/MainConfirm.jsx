@@ -12,7 +12,7 @@ export const MainConfirm = () => {
                     <>
                         <h1 className="text-2xl font-bold mb-5">Регистрация подтверждена</h1>
                         <p className="mb-5">Ваша регистрация успешно подтверждена. Теперь вы можете войти в систему.</p>
-                        <LinkAsButton href="/login">Перейти к авторизации</LinkAsButton>
+                        <LinkAsButton className="inline" href="/login">Перейти к авторизации</LinkAsButton>
                     </>
                 ) : (
                     <FormConfirm setConfirmed={(value) => setConfirmed(value)}/>
