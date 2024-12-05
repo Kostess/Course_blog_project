@@ -4,6 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const registrationRoutes = require('./routes/registrationRoutes');
 const cors = require('cors');
 const sequelize = require('./config/db');
+const path = require('path');
 
 const app = express();
 
@@ -13,8 +14,15 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], // Разрешенные заголовки
     credentials: true // Разрешаем отправку куки и авторизационных данных
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'), {
+    setHeaders: (res, filePath, stat) => {
+        res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+    }
+}));
 
 // Проверка подключения к базе данных
 sequelize

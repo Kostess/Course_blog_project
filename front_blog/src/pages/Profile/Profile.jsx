@@ -72,7 +72,7 @@ export const Profile = ({title}) => {
                     !user ?
                         <div className="container mx-auto">Пользователь не найден</div>
                         :
-                        <MainProfile user={user} onDelete={handleDelete} onSave={handleSave} />
+                        <MainProfile userData={user} onDelete={handleDelete} onSave={handleSave} />
             }
             <Footer />
         </>

@@ -3,27 +3,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const ProfileModel = require("../models/profileModel");
 const {destroy} = require("../models/registrationModel");
-const multer = require('multer');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 
 const jwtSecret = process.env.JWT_SECRET;
-
-// Настройка хранилища для файлов
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const dir = 'uploads/';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
-        }
-        cb(null, dir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
-export const upload = multer({ storage });
 
 const hashPassword = async (password) => {
     const saltRounds = 10;
@@ -65,7 +48,7 @@ exports.getUsersId = async (req, res) => {
             email: user.email,
             role: user.role,
             bio: user.profile.bio,
-            avatar: user.profile.avatar,
+            avatar: `http://localhost:3000${user.profile.avatar}`,
         };
 
         res.json(responseData);
@@ -142,8 +125,15 @@ exports.updateUser = async (req, res) => {
             return res.status(404).json({ message: 'Профиль не найден' });
         }
 
+        // Удаляем старый файл, если он существует
+        if (profile.avatar) {
+            const oldFilePath = path.join(__dirname, "../..", profile.avatar);
+            if (fs.existsSync(oldFilePath)) {
+                fs.unlinkSync(oldFilePath);
+            }
+        }
+
         // Обновляем данные профиля
-        console.log(`bio: ${bio}, avatar: ${avatar}`);
         const updateData = await profile.update({ bio, avatar });
 
         console.log("updateData: ", updateData);

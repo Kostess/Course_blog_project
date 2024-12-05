@@ -25,18 +25,12 @@ export const createUser = (user) => customFetch(`/register`, {
     },
     body: JSON.stringify(user),
 });
-export const updateUser = (id, user) => customFetch(`/user-update/${id}`, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        username: user.username,
-        email: user.email,
-        bio: user.bio,
-        avatar: user.avatar,
-    }),
-});
+export const updateUser = (id, formData) => {
+    return customFetch(`/user-update/${id}`, {
+        method: 'PUT',
+        body: formData,
+    })
+};
 export const deleteUser = (id) => customFetch(`/users-delete/${id}`, {
     method: 'DELETE',
 });

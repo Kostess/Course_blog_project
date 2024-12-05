@@ -20,7 +20,7 @@ const ProfileModel = sequelize.define('Profile', {
         allowNull: true,
     },
     avatar: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
         allowNull: true,
     },
 }, {

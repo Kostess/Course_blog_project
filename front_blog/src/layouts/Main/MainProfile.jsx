@@ -10,32 +10,26 @@ import {useAuth} from "@utils/useAuth.jsx";
 import {useNavigate} from "react-router-dom";
 import {deleteUser, updateUser} from "@api/api.js";
 
-export const MainProfile = ({ user, onDelete, onSave }) => {
-    const [avatar, setAvatar] = useState(user.avatar || defaultAvatar);
-    const [username, setUsername] = useState(user.username);
-    const [email, setEmail] = useState(user.email);
-    const [bio, setBio] = useState(user.bio);
-    const [isEditing, setIsEditing] = useState(false);
-
-    const {logout} = useAuth();
+export const MainProfile = ({ userData, onDelete, onSave }) => {
     const navigate = useNavigate();
+    const [user, setUser] = useState(userData);
+    const [isEditing, setIsEditing] = useState(false);
+    const [file, setFile] = useState(null);
+    const { logout } = useAuth();
 
     useEffect(() => {
-        // Обновляем состояние при изменении пропсов
-        setAvatar(user.avatar || defaultAvatar);
-        setUsername(user.username);
-        setEmail(user.email);
-        setBio(user.bio);
-    }, [user]);
+        setUser(userData);
+    }, [userData]);
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setAvatar(reader.result);
+                setUser({ ...user, avatar: reader.result });
             };
             reader.readAsDataURL(file);
+            setFile(file);
         }
     };
 
@@ -48,7 +42,7 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
 
     const handleDeleteProfile = async () => {
         try {
-            await deleteUser(user.userId)
+            await deleteUser(user.userId);
             onDelete();
         } catch (error) {
             console.error('Ошибка при удалении профиля:', error);
@@ -61,11 +55,17 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
 
     const handleSaveProfile = async () => {
         try {
-            await updateUser(user.userId, {username, email, bio, avatar});
+            const formData = new FormData();
+            formData.append('username', user.username);
+            formData.append('email', user.email);
+            formData.append('bio', user.bio);
+            if (file) {
+                formData.append('avatar', file);
+            }
 
-            // Вызываем функцию onSave, чтобы обновить состояние в родительском компоненте
+            await updateUser(user.userId, formData);
+
             onSave();
-
             setIsEditing(false);
         } catch (error) {
             console.error('Ошибка при сохранении профиля:', error);
@@ -77,7 +77,7 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
             <div className="flex justify-between">
                 <div className="flex gap-5 max-w-xl w-full">
                     <label htmlFor="avatar-upload" className="cursor-pointer">
-                        <ButtonProfile avatar={avatar} widthClassName="w-32" heightClassName="h-32" />
+                        <ButtonProfile avatar={user.avatar || defaultAvatar} widthClassName="w-32" heightClassName="h-32" />
                     </label>
                     <input
                         id="avatar-upload"
@@ -91,17 +91,17 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
                             <>
                                 <Input
                                     type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    value={user.username}
+                                    onChange={(e) => setUser({ ...user, username: e.target.value })}
                                 />
                                 <Input
                                     type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={user.email}
+                                    onChange={(e) => setUser({ ...user, email: e.target.value })}
                                 />
                                 <Textarea
-                                    value={bio}
-                                    onChange={(e) => setBio(e.target.value)}
+                                    value={user.bio}
+                                    onChange={(e) => setUser({ ...user, bio: e.target.value })}
                                 />
                                 <MainButton
                                     onClick={handleSaveProfile}
@@ -112,9 +112,9 @@ export const MainProfile = ({ user, onDelete, onSave }) => {
                             </>
                         ) : (
                             <>
-                                <span>Username: {username}</span>
-                                <span>Email: {email}</span>
-                                <span>Биография: {bio}</span>
+                                <span>Username: {user.username}</span>
+                                <span>Email: {user.email}</span>
+                                <span>Биография: {user.bio}</span>
                             </>
                         )}
                     </div>
