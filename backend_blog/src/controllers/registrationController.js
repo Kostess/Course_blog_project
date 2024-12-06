@@ -27,7 +27,7 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await hashPassword(password);
 
         // Генерируем токен подтверждения
-        const token = jwt.sign({ email }, jwtSecret, { expiresIn: '1h' });
+        const token = jwt.sign({ email, createdAt: Date.now() }, jwtSecret, { expiresIn: '1h' });
 
         // Создаем запись в таблице регистрации
         const registration = await RegistrationModel.create({
@@ -43,7 +43,7 @@ exports.registerUser = async (req, res) => {
             from: emailUser,
             to: email,
             subject: 'Подтверждение регистрации',
-            text: `Для подтверждения регистрации перейдите по ссылке: http://localhost:5173/confirm-page \n и вставьте токен: ${token}`,
+            text: `Для подтверждения регистрации перейдите по ссылке: http://localhost:5173/confirm-page \nи вставьте токен: ${token}`,
         };
 
         await transporter.sendMail(mailOptions);

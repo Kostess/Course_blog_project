@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const ProfileModel = require("../models/profileModel");
-const {destroy} = require("../models/registrationModel");
+const RegistrationModel = require("../models/registrationModel");
 const fs = require('fs');
 const path = require('path');
 
@@ -154,11 +154,26 @@ exports.deleteUser = async (req, res) => {
             return res.status(404).json({ message: 'Пользователь не найден' });
         }
 
-        // Удаляем связанные записи из таблиц profiles и registrations
-        await ProfileModel.destroy({ where: { user_id: id } });
-        await destroy({ where: { user_id: id } });
+        const profile = await ProfileModel.findOne({where: { user_id: id }});
+        if (!profile) {
+            return res.status(404).json({ message: 'Профиль не найден' });
+        }
+        console.log("profile: ", profile)
+        // Удаляем старый файл, если он существует
+        if (profile.avatar) {
+            const oldFilePath = path.join(__dirname, "../..", profile.avatar);
+            if (fs.existsSync(oldFilePath)) {
+                fs.unlinkSync(oldFilePath);
+            }
+        }
+
+        // Удаляем запись профиля из базы данных
+        await profile.destroy();
+
+        await RegistrationModel.destroy({ where: { user_id: id } });
 
         await user.destroy();
+        console.log("Пользователь и профиль успешно удалены");
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ message: `Ошибка сервера при удалении пользователя ${error}` });

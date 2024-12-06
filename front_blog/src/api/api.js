@@ -9,9 +9,12 @@ const customFetch = async (url, options = {}) => {
         };
     }
     const response = await fetch(`${API_BASE_URL}${url}`, options);
-    console.log(response);
+    console.log(`Запрос к ${url} завершен с кодом ${response.status}`);
     if (!response.ok) {
         throw new Error(`Error ${response.status}`);
+    }
+    if (response.status === 204) {
+        return {};
     }
     return response.json();
 };

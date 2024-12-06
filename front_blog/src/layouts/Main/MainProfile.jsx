@@ -42,8 +42,11 @@ export const MainProfile = ({ userData, onDelete, onSave }) => {
 
     const handleDeleteProfile = async () => {
         try {
+            console.log("Удаление профиля");
             await deleteUser(user.userId);
-            onDelete();
+            console.log("Удаление профиля успешно");
+            await onDelete();
+            console.log("Удаление профиля успешно закончено");
         } catch (error) {
             console.error('Ошибка при удалении профиля:', error);
         }

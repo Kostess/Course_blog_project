@@ -38,9 +38,13 @@ export const Profile = ({title}) => {
 
     const handleDelete = () => {
         // Очищаем состояние пользователя и выполняем другие необходимые действия
+        console.log('Удаление пользователя');
         setUser(null);
+        console.log("Удаление токена");
         localStorage.removeItem('token');
+        console.log("перенаправление на страницу логина");
         navigate('/login', { replace: true });
+        console.log("всё");
     };
 
     const handleSave = () => {

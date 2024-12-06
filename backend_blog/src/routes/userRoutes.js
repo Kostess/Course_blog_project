@@ -11,7 +11,6 @@ const { extname } = require("path");
 // Настройка хранилища для файлов
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log(11111111111111111111111111111111111111111111);
         const dir = 'uploads/';
         if (!existsSync(dir)) {
             mkdirSync(dir);
@@ -19,7 +18,6 @@ const storage = multer.diskStorage({
         cb(null, dir);
     },
     filename: (req, file, cb) => {
-        console.log(222222222222222222222222222222222222222);
         cb(null, Date.now() + extname(file.originalname));
     }
 });
