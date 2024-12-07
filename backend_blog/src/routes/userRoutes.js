@@ -42,13 +42,7 @@ userRoutes.post('/user-login',
     userController.loginUser
 );
 
-const log = (req, res, next) => {
-    console.log('Content-Type:', req.headers['content-type']);
-    console.log('file:', req.file);
-    next();
-}
-
-userRoutes.put('/user-update/:id', cors(), upload.single('avatar'), log, userController.updateUser);
+userRoutes.put('/user-update/:id', cors(), upload.single('avatar'), userController.updateUser);
 
 userRoutes.delete('/users-delete/:id', cors(), userController.deleteUser);
 

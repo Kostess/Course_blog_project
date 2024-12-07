@@ -17,7 +17,7 @@ export const MessageDetails = ({message, onReply}) => {
             <p className="mt-4">{message.message}</p>
             <div className="mt-4">
                 <textarea
-                    className="w-full h-32 p-2 border border-gray-300 rounded"
+                    className="w-full bg-main-blue px-4 py-2.5 rounded-lg outline-0"
                     placeholder="Ваш ответ..."
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}

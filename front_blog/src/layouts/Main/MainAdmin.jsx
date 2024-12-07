@@ -4,11 +4,13 @@ import {ModerationList} from "@components/AdminWindow/ModerationList.jsx";
 import {ModerationDetails} from "@components/AdminWindow/ModerationDetails.jsx";
 import {MessageList} from "@components/AdminWindow/MessageList.jsx";
 import {MessageDetails} from "@components/AdminWindow/MessageDetails.jsx";
+import {sendReply, getMessages} from "@api/api.js";
 
 export const MainAdmin = ({windowMain}) => {
     const [currentWindow, setCurrentWindow] = useState("statistic");
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedMessage, setSelectedMessage] = useState(null);
+    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         switch (windowMain) {
@@ -27,6 +29,13 @@ export const MainAdmin = ({windowMain}) => {
         }
     }, [windowMain]);
 
+    useEffect(() => {
+        // Запрос к API для получения списка сообщений
+        getMessages()
+            .then(data => setMessages(data))
+            .catch(error => console.error('Error fetching messages:', error));
+    }, []);
+
     const handlePostSelect = (post) => {
         setSelectedPost(post);
     };
@@ -42,9 +51,19 @@ export const MainAdmin = ({windowMain}) => {
     };
 
     const handleReply = (reply) => {
-        // Обработка ответа на сообщение
-        console.log("Reply:", reply);
-        // Здесь можно добавить логику для отправки ответа на сервер
+        if (selectedMessage) {
+            sendReply({ id: selectedMessage.id, email: selectedMessage.email, replyMessage: reply })
+                .then(data => {
+                    console.log(data);
+                    // Обновляем список сообщений после отправки ответа
+                    getMessages()
+                        .then(data => setMessages(data))
+                        .catch(error => console.error('Error fetching messages:', error));
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     };
 
     return (
@@ -60,7 +79,7 @@ export const MainAdmin = ({windowMain}) => {
             )}
             {currentWindow === "message" && (
                 <div className="flex">
-                    <MessageList onMessageSelect={handleMessageSelect} />
+                    <MessageList messages={messages} onMessageSelect={handleMessageSelect} />
                     {selectedMessage && (
                         <MessageDetails message={selectedMessage} onReply={handleReply} />
                     )}

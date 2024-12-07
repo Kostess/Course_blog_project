@@ -1,24 +1,4 @@
-import {useState, useEffect} from "react";
-
-export const MessageList = ({onMessageSelect}) => {
-    const [messages, setMessages] = useState([]);
-
-    useEffect(() => {
-        // Здесь можно добавить логику для получения списка сообщений
-        // Например, запрос к API
-        const mockMessages = [
-            {
-                id: 1,
-                name: "Иван Иванов",
-                email: "ivan@example.com",
-                subject: "Проблема с регистрацией",
-                message: "Здравствуйте, у меня возникли проблемы с регистрацией на сайте.",
-            },
-            // Добавьте другие сообщения по аналогии
-        ];
-        setMessages(mockMessages);
-    }, []);
-
+export const MessageList = ({messages, onMessageSelect}) => {
     return (
         <div className="w-1/3 pr-4">
             <h2 className="text-xl font-bold mb-4">Сообщения</h2>

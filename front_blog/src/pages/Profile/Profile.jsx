@@ -5,11 +5,13 @@ import {MainProfile} from "@layouts/Main/MainProfile.jsx";
 import {jwtDecode} from 'jwt-decode';
 import {getUserAndProfile} from "@api/api.js";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "@utils/useAuth.jsx";
 
 export const Profile = ({title}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const {userId} = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +22,6 @@ export const Profile = ({title}) => {
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
-                    console.log(decoded);
                     const userData = await getUserAndProfile(decoded.userId);
                     setUser(userData);
                 } catch (error) {

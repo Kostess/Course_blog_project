@@ -1,6 +1,7 @@
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {MainButton} from "@ui/Button/Button.jsx";
+import {submitForm} from "@api/api.js";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Введите имя"),
@@ -19,10 +20,21 @@ export const FormContact = () => {
         { value: 'other', label: 'Другое' }
     ];
 
+    const handleSubmit = async (values, { setSubmitting }) => {
+        try {
+            const response = await submitForm(values);
+            console.log('Сообщение отправлено админу:', response);
+        } catch (error) {
+            console.error('Ошибка отправки сообщения админу:', error);
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
     return (
         <Formik
             initialValues={{ name: '', email: '', select: '', message: '' }}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={handleSubmit}
             validationSchema={validationSchema}
         >
             {({ isSubmitting, submitCount, errors }) => (

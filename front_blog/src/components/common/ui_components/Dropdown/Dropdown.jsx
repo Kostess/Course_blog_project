@@ -2,7 +2,7 @@ import {ButtonProfile} from "@ui/Button/Button.jsx";
 import {useState} from "react";
 import {useAuth} from "@utils/useAuth.jsx";
 
-export const DropdownProfile = ({logout}) => {
+export const DropdownProfile = ({logout, avatar}) => {
     const { isAdmin } = useAuth();
     const [isHiddenOptions, setIsHiddenOptions] = useState(true);
     const openOptions = () => {
@@ -11,7 +11,7 @@ export const DropdownProfile = ({logout}) => {
 
     return (
         <div className="relative">
-            <ButtonProfile onClick={openOptions} widthClassName="w-10" heightClassName="h-10"/>
+            <ButtonProfile avatar={avatar} onClick={openOptions} widthClassName="w-10" heightClassName="h-10"/>
             <div
                 className={`w-24 overflow-hidden bg-main-gray text-black rounded-lg absolute top-12 -left-8 transition-max-height duration-700 ease-in-out ${isHiddenOptions ? 'max-h-0 p-0' : 'max-h-[210px] py-3 '}`}>
                 <a href="/profile"

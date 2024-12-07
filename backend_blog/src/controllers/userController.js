@@ -8,10 +8,14 @@ const path = require('path');
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const hashPassword = async (password) => {
-    const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
-};
+const deleteAvatarUser = (avatar) => {
+    if (avatar) {
+        const oldFilePath = path.join(__dirname, "../..", avatar);
+        if (fs.existsSync(oldFilePath)) {
+            fs.unlinkSync(oldFilePath);
+        }
+    }
+}
 
 exports.getUsers = async (req, res) => {
     try {
@@ -58,28 +62,6 @@ exports.getUsersId = async (req, res) => {
     }
 }
 
-exports.createUser = async (req, res) => {
-    const { username, email, password } = req.body;
-
-    try {
-        const hashedPassword = await hashPassword(password);
-        const userCount = await User.count();
-        const role = userCount === 0 ? 'admin' : 'user';
-
-        const user = await User.create({
-            username,
-            email,
-            password_hash: hashedPassword,
-            role
-        });
-
-        res.status(201).json({ message: 'Пользователь успешно создан', isCreated: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: `Ошибка сервера при создании пользователя ${error}` });
-    }
-};
-
 exports.loginUser = async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -94,7 +76,7 @@ exports.loginUser = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.user_id, username: user.username, email: user.email, role: user.role }, jwtSecret, { expiresIn: '1h' });
-        console.log(token);
+
         res.json({ token });
     } catch (error) {
         console.error('Ошибка авторизации:', error);
@@ -126,12 +108,7 @@ exports.updateUser = async (req, res) => {
         }
 
         // Удаляем старый файл, если он существует
-        if (profile.avatar) {
-            const oldFilePath = path.join(__dirname, "../..", profile.avatar);
-            if (fs.existsSync(oldFilePath)) {
-                fs.unlinkSync(oldFilePath);
-            }
-        }
+        deleteAvatarUser(profile.avatar);
 
         // Обновляем данные профиля
         const updateData = await profile.update({ bio, avatar });
@@ -160,12 +137,7 @@ exports.deleteUser = async (req, res) => {
         }
         console.log("profile: ", profile)
         // Удаляем старый файл, если он существует
-        if (profile.avatar) {
-            const oldFilePath = path.join(__dirname, "../..", profile.avatar);
-            if (fs.existsSync(oldFilePath)) {
-                fs.unlinkSync(oldFilePath);
-            }
-        }
+        deleteAvatarUser(profile.avatar);
 
         // Удаляем запись профиля из базы данных
         await profile.destroy();

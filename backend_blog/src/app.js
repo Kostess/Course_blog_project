@@ -1,10 +1,10 @@
 const express = require('express');
-const pool = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const registrationRoutes = require('./routes/registrationRoutes');
 const cors = require('cors');
 const sequelize = require('./config/db');
 const path = require('path');
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -45,8 +45,10 @@ sequelize.sync()
 
 app.use('/api', userRoutes);
 app.use('/api', registrationRoutes);
+app.use('/api', adminRoutes);
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });

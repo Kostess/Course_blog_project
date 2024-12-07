@@ -61,3 +61,24 @@ export const confirmRegistration = async (token) => {
         body: JSON.stringify({token}),
     });
 };
+
+// Новые функции для работы с сообщениями
+export const submitForm = (formData) => {
+    return customFetch('/admin-message', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    });
+}
+
+export const getMessages = () => customFetch('/admin-messages');
+
+export const sendReply = (replyData) => customFetch('/send-message', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(replyData),
+});
